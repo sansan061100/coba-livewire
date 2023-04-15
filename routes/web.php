@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +16,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $faker = \Faker\Factory::create();
+    for ($i = 0; $i < 1000; $i++) {
+        $product = Product::create([
+            'name' => $faker->name,
+            'price' => $faker->randomFloat(2, 0, 1000),
+        ]);
+    }
 });
 
 Route::get('/dashboard', function () {
@@ -28,4 +35,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
