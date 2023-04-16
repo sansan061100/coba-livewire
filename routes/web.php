@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Models\Product;
+use App\Http\Livewire\Product\Product;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,16 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    $faker = \Faker\Factory::create();
-    for ($i = 0; $i < 1000; $i++) {
-        $product = Product::create([
-            'name' => $faker->name,
-            'price' => $faker->randomFloat(2, 0, 1000),
-        ]);
-    }
-});
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -33,6 +23,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/products', Product::class)->name('product.index');
+    // edit
+    Route::get('/products/{id}/edit', Product::class)->name('product.edit');
 });
 
 require __DIR__ . '/auth.php';
